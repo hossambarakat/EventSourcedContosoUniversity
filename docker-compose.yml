@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  eventsourcedcontosouniversity:
+    image: eventsourcedcontosouniversity
+    build:
+      context: ./EventSourcedContosoUniversity
+      dockerfile: Dockerfile
