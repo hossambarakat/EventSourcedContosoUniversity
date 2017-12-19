@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventSourcedContosoUniversity", "EventSourcedContosoUniversity\EventSourcedContosoUniversity.csproj", "{46BA47D9-72BA-42E7-A24E-2B2A1B424003}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventSourcedContosoUniversity", "EventSourcedContosoUniversity\EventSourcedContosoUniversity.csproj", "{46BA47D9-72BA-42E7-A24E-2B2A1B424003}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{26CC862B-8680-4E6D-83F5-20654BB9B9D5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventSourcedContosoUniversity.ReadModel", "EventSourcedContosoUniversity.ReadModel\EventSourcedContosoUniversity.ReadModel.csproj", "{FD8CFCDB-B269-4162-9799-0BD2865EAE00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventSourcedContosoUniversity.Core", "EventSourcedContosoUniversity.Core\EventSourcedContosoUniversity.Core.csproj", "{E5BC2EA5-F594-4527-910F-8B742080EF83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{26CC862B-8680-4E6D-83F5-20654BB9B9D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26CC862B-8680-4E6D-83F5-20654BB9B9D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26CC862B-8680-4E6D-83F5-20654BB9B9D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD8CFCDB-B269-4162-9799-0BD2865EAE00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD8CFCDB-B269-4162-9799-0BD2865EAE00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD8CFCDB-B269-4162-9799-0BD2865EAE00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD8CFCDB-B269-4162-9799-0BD2865EAE00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5BC2EA5-F594-4527-910F-8B742080EF83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5BC2EA5-F594-4527-910F-8B742080EF83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5BC2EA5-F594-4527-910F-8B742080EF83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5BC2EA5-F594-4527-910F-8B742080EF83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
