@@ -4,7 +4,7 @@ using EventSourcedContosoUniversity.Core.Domain;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 
-namespace EventSourcedContosoUniversity.Core
+namespace EventSourcedContosoUniversity.Core.Infrastructure.EventStore
 {
     public class EventStoreDispatcher
     {

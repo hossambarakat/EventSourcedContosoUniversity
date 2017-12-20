@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace EventSourcedContosoUniversity.Core.Domain
+namespace EventSourcedContosoUniversity.Core.Domain.Repositories
 {
     public interface IRepository<T> where T : AggregateRoot
     {

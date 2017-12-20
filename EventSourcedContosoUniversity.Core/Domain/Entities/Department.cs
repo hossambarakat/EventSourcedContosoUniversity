@@ -1,7 +1,7 @@
 ﻿using System;
 using EventSourcedContosoUniversity.Core.Domain.Events;
 
-namespace EventSourcedContosoUniversity.Core.Domain
+namespace EventSourcedContosoUniversity.Core.Domain.Entities
 {
     public class Department : AggregateRoot
     {

@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using EventSourcedContosoUniversity.Core.Domain;
+using EventSourcedContosoUniversity.Core.Domain.Entities;
+using EventSourcedContosoUniversity.Core.Domain.Repositories;
 using MediatR;
 
 namespace EventSourcedContosoUniversity.Features.Departments

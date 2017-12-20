@@ -4,9 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventSourcedContosoUniversity.Core.Extensions;
 using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 
-namespace EventSourcedContosoUniversity.Core
+namespace EventSourcedContosoUniversity.Core.ReadModel.Repositories
 {
     public class MongoRepository : IReadModelRepository
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace EventSourcedContosoUniversity.Core
+namespace EventSourcedContosoUniversity.Core.ReadModel.Repositories
 {
     public interface IReadModelRepository
     {

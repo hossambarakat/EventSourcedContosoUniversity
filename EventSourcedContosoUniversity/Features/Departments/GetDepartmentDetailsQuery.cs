@@ -4,6 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using EventSourcedContosoUniversity.Core;
 using EventSourcedContosoUniversity.Core.ReadModel;
+using EventSourcedContosoUniversity.Core.ReadModel.Departments;
+using EventSourcedContosoUniversity.Core.ReadModel.Repositories;
 using MediatR;
 
 namespace EventSourcedContosoUniversity.Features.Departments

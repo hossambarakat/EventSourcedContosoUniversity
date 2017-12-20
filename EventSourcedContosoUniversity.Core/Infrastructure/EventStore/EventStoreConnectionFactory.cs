@@ -1,7 +1,7 @@
 using System.Net;
 using EventStore.ClientAPI;
 
-namespace EventSourcedContosoUniversity.Core
+namespace EventSourcedContosoUniversity.Core.Infrastructure.EventStore
 {
     public class EventStoreConnectionFactory
     {

@@ -1,11 +1,12 @@
 ﻿using System;
 using Akka.Actor;
 using EventSourcedContosoUniversity.Core.Domain.Events;
-using EventSourcedContosoUniversity.Core.ReadModel;
+using EventSourcedContosoUniversity.Core.Infrastructure.EventStore;
+using EventSourcedContosoUniversity.Core.ReadModel.Repositories;
 using EventStore.ClientAPI;
 using MongoDB.Driver;
 
-namespace EventSourcedContosoUniversity.Core
+namespace EventSourcedContosoUniversity.Core.ReadModel.Departments
 {
     public class DepartmentsProjectionActor : ReceiveActor
     {

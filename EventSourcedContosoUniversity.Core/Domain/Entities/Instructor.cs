@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EventSourcedContosoUniversity.Core.Domain
+namespace EventSourcedContosoUniversity.Core.Domain.Entities
 {
     public class Instructor : Person
     {

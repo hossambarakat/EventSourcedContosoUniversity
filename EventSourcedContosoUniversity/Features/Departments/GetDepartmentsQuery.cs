@@ -7,6 +7,8 @@ using System.ComponentModel;
 using EventSourcedContosoUniversity.Core;
 using EventSourcedContosoUniversity.Core.ReadModel;
 using System.Linq;
+using EventSourcedContosoUniversity.Core.ReadModel.Departments;
+using EventSourcedContosoUniversity.Core.ReadModel.Repositories;
 
 namespace EventSourcedContosoUniversity.Features.Departments
 {

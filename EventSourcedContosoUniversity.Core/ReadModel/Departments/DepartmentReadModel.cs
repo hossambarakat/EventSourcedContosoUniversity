@@ -1,6 +1,7 @@
-﻿using System;
+using System;
+using EventSourcedContosoUniversity.Core.ReadModel.Repositories;
 
-namespace EventSourcedContosoUniversity.Core.ReadModel
+namespace EventSourcedContosoUniversity.Core.ReadModel.Departments
 {
     [CollectionName("departments")]
     public class DepartmentReadModel : IMongoDocument

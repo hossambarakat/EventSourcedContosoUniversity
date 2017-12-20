@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +7,8 @@ using EventStore.ClientAPI;
 using System.Net;
 using EventSourcedContosoUniversity.Core.Domain;
 using EventSourcedContosoUniversity.Core;
+using EventSourcedContosoUniversity.Core.Domain.Repositories;
+using EventSourcedContosoUniversity.Core.ReadModel.Repositories;
 using MongoDB.Driver;
 
 namespace EventSourcedContosoUniversity

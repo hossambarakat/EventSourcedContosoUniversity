@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace EventSourcedContosoUniversity.Core.Domain
+namespace EventSourcedContosoUniversity.Core.Domain.Entities
 {
     public class Course 
     {

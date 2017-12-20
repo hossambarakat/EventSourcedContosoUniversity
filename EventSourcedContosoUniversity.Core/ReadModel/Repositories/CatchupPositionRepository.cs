@@ -4,7 +4,7 @@ using EventSourcedContosoUniversity.Core.Extensions;
 using EventStore.ClientAPI;
 using MongoDB.Driver;
 
-namespace EventSourcedContosoUniversity.Core
+namespace EventSourcedContosoUniversity.Core.ReadModel.Repositories
 {
     public class CatchupPositionRepository : MongoRepository
     {

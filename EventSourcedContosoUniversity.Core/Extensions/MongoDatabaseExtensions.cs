@@ -1,4 +1,5 @@
 ﻿using System;
+using EventSourcedContosoUniversity.Core.ReadModel.Repositories;
 using MongoDB.Driver;
 
 namespace EventSourcedContosoUniversity.Core.Extensions

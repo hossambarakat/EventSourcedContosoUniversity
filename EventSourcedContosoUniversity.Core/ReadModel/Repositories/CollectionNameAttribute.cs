@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EventSourcedContosoUniversity.Core
+namespace EventSourcedContosoUniversity.Core.ReadModel.Repositories
 {
     public class CollectionNameAttribute : Attribute
     {

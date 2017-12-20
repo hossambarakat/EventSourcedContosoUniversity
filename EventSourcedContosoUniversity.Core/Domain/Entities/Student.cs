@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace EventSourcedContosoUniversity.Core.Domain
+namespace EventSourcedContosoUniversity.Core.Domain.Entities
 {
     public class Student : Person
     {

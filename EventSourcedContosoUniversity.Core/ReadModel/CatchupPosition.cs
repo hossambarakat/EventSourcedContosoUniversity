@@ -1,6 +1,7 @@
 ﻿using System;
+using EventSourcedContosoUniversity.Core.ReadModel.Repositories;
 
-namespace EventSourcedContosoUniversity.Core
+namespace EventSourcedContosoUniversity.Core.ReadModel
 {
     [CollectionName("CatchupPositions")]
     public class CatchupPosition : IMongoDocument

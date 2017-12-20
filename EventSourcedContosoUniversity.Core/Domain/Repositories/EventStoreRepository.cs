@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
-namespace EventSourcedContosoUniversity.Core.Domain
+namespace EventSourcedContosoUniversity.Core.Domain.Repositories
 {
     public class EventStoreRepository<T> : IRepository<T> where T : AggregateRoot
     {

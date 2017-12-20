@@ -1,6 +1,7 @@
-﻿using Akka.Actor;
+using Akka.Actor;
+using EventSourcedContosoUniversity.Core.ReadModel.Departments;
 
-namespace EventSourcedContosoUniversity.Core
+namespace EventSourcedContosoUniversity.ReadModel
 {
     class Program
     {

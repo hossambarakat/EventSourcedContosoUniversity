@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.ComponentModel.DataAnnotations;
 using EventSourcedContosoUniversity.Core.Domain;
+using EventSourcedContosoUniversity.Core.Domain.Entities;
+using EventSourcedContosoUniversity.Core.Domain.Repositories;
 
 namespace EventSourcedContosoUniversity.Features.Departments
 {
