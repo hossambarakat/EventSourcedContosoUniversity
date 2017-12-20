@@ -6,3 +6,20 @@ services:
     build:
       context: ./EventSourcedContosoUniversity
       dockerfile: Dockerfile
+
+  eventsourcedcontosouniversity.readmodel:
+    image: eventsourcedcontosouniversity.readmodel
+    build:
+      context: .
+      dockerfile: EventSourcedContosoUniversity.ReadModel/Dockerfile
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+
+  eventstore:
+    image: eventstore/eventstore
+    ports:
+      - "2113:2113"
+      - "1113:1113"
