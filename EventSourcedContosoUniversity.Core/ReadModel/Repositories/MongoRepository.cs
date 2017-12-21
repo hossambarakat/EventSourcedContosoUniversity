@@ -1,44 +1,49 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventSourcedContosoUniversity.Core.Extensions;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace EventSourcedContosoUniversity.Core.ReadModel.Repositories
 {
     public class MongoRepository : IReadModelRepository
     {
-        private IMongoClient _client;
-        //TODO: read db name from config
-        protected IMongoDatabase _db { get { return _client.GetDatabase("contosouni"); } }
-        public MongoRepository(IMongoClient client)
+        private readonly IMongoClient _client;
+
+        private readonly IOptions<ReadModelSettings> _settings;
+
+        protected IMongoDatabase Db => _client.GetDatabase(_settings.Value.MongoDatabase);
+
+        public MongoRepository(IMongoClient client, IOptions<ReadModelSettings> settings)
         {
             _client = client;
+            _settings = settings;
         }
         
         public Task Delete<T>(T item) where T : IMongoDocument, new()
         {
-            return _db.GetCollection<T>().DeleteOneAsync(x=> x.Id == item.Id);
+            return Db.GetCollection<T>().DeleteOneAsync(x=> x.Id == item.Id);
         }
         
         public Task<T> GetById<T>(Guid id) where T : IMongoDocument, new()
         {
-            return _db.GetCollection<T>().AsQueryable().Where(x=>x.Id==id).SingleOrDefaultAsync();
+            return Db.GetCollection<T>().Find(x => x.Id == id).FirstOrDefaultAsync();
         }
         public Task<List<T>> All<T>() where T : IMongoDocument, new()
         {
-            return _db.GetCollection<T>().AsQueryable().ToListAsync();
+            return Db.GetCollection<T>().AsQueryable().ToListAsync();
         }
         
         public Task Add<T>(T item) where T : IMongoDocument, new()
         {
-            return _db.GetCollection<T>().InsertOneAsync(item);
+            return Db.GetCollection<T>().InsertOneAsync(item);
         }
         
         public Task Update<T>(T item) where T : IMongoDocument, new()
         {
-            return _db.GetCollection<T>().ReplaceOneAsync(x => x.Id == item.Id, item);
+            return Db.GetCollection<T>().ReplaceOneAsync(x => x.Id == item.Id, item);
         }
     }
 }

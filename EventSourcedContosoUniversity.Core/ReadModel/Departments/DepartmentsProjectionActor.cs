@@ -1,29 +1,31 @@
-﻿using System;
+using System;
 using Akka.Actor;
 using EventSourcedContosoUniversity.Core.Domain.Events;
 using EventSourcedContosoUniversity.Core.Infrastructure.EventStore;
 using EventSourcedContosoUniversity.Core.ReadModel.Repositories;
 using EventStore.ClientAPI;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace EventSourcedContosoUniversity.Core.ReadModel.Departments
 {
     public class DepartmentsProjectionActor : ReceiveActor
     {
+        readonly EventStoreDispatcher _dispatcher;
+        private readonly ICatchupPositionRepository _catchupPositionRepository;
+
         public class SaveEventMessage
         {
             public long CommitPosition { get; set; }
             public long PreparePosition { get; set; }
         }
-
-        EventStoreDispatcher _dispatcher;
-        public DepartmentsProjectionActor()
+        public DepartmentsProjectionActor(IReadModelRepository repository, ICatchupPositionRepository catchupPositionRepository)
         {
+            _catchupPositionRepository = catchupPositionRepository;
             _dispatcher = new EventStoreDispatcher(new EventStoreConnectionFactory());
             var client = new MongoClient();
             ReceiveAsync<DepartmentCreated>(async (s) =>
             {
-                var repository = new MongoRepository(client);
                 await repository.Add(new DepartmentReadModel
                 {
                     Id = s.Id,
@@ -36,7 +38,6 @@ namespace EventSourcedContosoUniversity.Core.ReadModel.Departments
 
             ReceiveAsync<DepartmentUpdated>(async (s) =>
             {
-                var repository = new MongoRepository(client);
                 var department = await repository.GetById<DepartmentReadModel>(s.Id);
                 department.Name = s.Name;
                 department.Budget = s.Budget;
@@ -46,24 +47,21 @@ namespace EventSourcedContosoUniversity.Core.ReadModel.Departments
             });
             ReceiveAsync<SaveEventMessage>( async (s) =>
             {
-                CatchupPositionRepository catchupPositionRepository = new CatchupPositionRepository(client);
-                await catchupPositionRepository.SavePosition<DepartmentReadModel>(new Position(s.CommitPosition, s.PreparePosition));
+                await _catchupPositionRepository.SavePosition<DepartmentReadModel>(new Position(s.CommitPosition, s.PreparePosition));
             });
         }
 
         protected override void PreStart()
         {
             var sender = Self;
-            var client = new MongoClient();
-            CatchupPositionRepository catchupPositionRepository = new CatchupPositionRepository(client);
-            var last=catchupPositionRepository.GetLastProcessedPosition<DepartmentReadModel>().Result ;
+            var last= _catchupPositionRepository.GetLastProcessedPosition<DepartmentReadModel>().Result ;
             var lastProcessedPosition = last != null ? new Position(last.CommitPosition, last.PreparePosition) : Position.Start;
             
             _dispatcher.StartDispatchingForAll(lastProcessedPosition.CommitPosition, lastProcessedPosition.PreparePosition, (o) =>
             {
                 sender.Tell(o);
             },
-                (long commitPosition, long preparePosition) =>
+                (commitPosition, preparePosition) =>
                 {
                     sender.Tell(new SaveEventMessage
                     {

@@ -1,24 +1,25 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using EventSourcedContosoUniversity.Core.Extensions;
 using EventStore.ClientAPI;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace EventSourcedContosoUniversity.Core.ReadModel.Repositories
 {
-    public class CatchupPositionRepository : MongoRepository
+    public class CatchupPositionRepository : MongoRepository, ICatchupPositionRepository
     {
-        public CatchupPositionRepository(IMongoClient client) : base(client)
+        public CatchupPositionRepository(IMongoClient client, IOptions<ReadModelSettings> settings) : base(client, settings)
         {
         }
         public async Task SavePosition<T>(Position position) where T : IMongoDocument
         {
-            var collectionName = _db.GetCollectionName<T>();
+            var collectionName = Db.GetCollectionName<T>();
             ;
-            var currentPosition = await _db.GetCollection<CatchupPosition>().Find(x => x.CollectionName == collectionName).SingleOrDefaultAsync();
+            var currentPosition = await Db.GetCollection<CatchupPosition>().Find(x => x.CollectionName == collectionName).SingleOrDefaultAsync();
             if(currentPosition==null)
             {
-                await _db.GetCollection<CatchupPosition>().InsertOneAsync(new CatchupPosition
+                await Db.GetCollection<CatchupPosition>().InsertOneAsync(new CatchupPosition
                 {
                     Id= Guid.NewGuid(),
                     CollectionName = collectionName,
@@ -29,15 +30,21 @@ namespace EventSourcedContosoUniversity.Core.ReadModel.Repositories
             else
             {
                 var updateDefinition = Builders<CatchupPosition>.Update.Set(x => x.CommitPosition, position.CommitPosition).Set(x=>x.PreparePosition , position.PreparePosition);
-                await _db.GetCollection<CatchupPosition>().FindOneAndUpdateAsync(x => x.Id == currentPosition.Id, updateDefinition);
+                await Db.GetCollection<CatchupPosition>().FindOneAndUpdateAsync(x => x.Id == currentPosition.Id, updateDefinition);
             }
            
         }
         public async Task<CatchupPosition> GetLastProcessedPosition<T>() where T : IMongoDocument
         {
-            var collectionName = _db.GetCollectionName<T>();
-            var currentPosition = await _db.GetCollection<CatchupPosition>().Find(x => x.CollectionName == collectionName).SingleOrDefaultAsync();
+            var collectionName = Db.GetCollectionName<T>();
+            var currentPosition = await Db.GetCollection<CatchupPosition>().Find(x => x.CollectionName == collectionName).SingleOrDefaultAsync();
             return currentPosition;
         }
+    }
+
+    public interface ICatchupPositionRepository
+    {
+        Task<CatchupPosition> GetLastProcessedPosition<T>() where T : IMongoDocument;
+        Task SavePosition<T>(Position position) where T : IMongoDocument;
     }
 }
