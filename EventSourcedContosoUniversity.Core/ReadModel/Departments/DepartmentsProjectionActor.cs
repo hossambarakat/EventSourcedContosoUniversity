@@ -19,11 +19,10 @@ namespace EventSourcedContosoUniversity.Core.ReadModel.Departments
             public long CommitPosition { get; set; }
             public long PreparePosition { get; set; }
         }
-        public DepartmentsProjectionActor(IReadModelRepository repository, ICatchupPositionRepository catchupPositionRepository)
+        public DepartmentsProjectionActor(EventStoreDispatcher dispatcher, IReadModelRepository repository, ICatchupPositionRepository catchupPositionRepository)
         {
             _catchupPositionRepository = catchupPositionRepository;
-            _dispatcher = new EventStoreDispatcher(new EventStoreConnectionFactory());
-            var client = new MongoClient();
+            _dispatcher = dispatcher;
             ReceiveAsync<DepartmentCreated>(async (s) =>
             {
                 await repository.Add(new DepartmentReadModel

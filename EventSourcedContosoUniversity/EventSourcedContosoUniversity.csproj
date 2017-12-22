@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.6.2" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.0" />
     <PackageReference Include="EventStore.ClientAPI.NetCore" Version="4.0.3-rc" />
     <PackageReference Include="MediatR" Version="4.0.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="4.0.0" />
@@ -19,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\" />
+    <Folder Include="Infrastructure\IoC\" />
   </ItemGroup>
 
   <ItemGroup>

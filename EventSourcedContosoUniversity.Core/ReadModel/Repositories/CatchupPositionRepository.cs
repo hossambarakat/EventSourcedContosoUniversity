@@ -2,14 +2,13 @@ using System;
 using System.Threading.Tasks;
 using EventSourcedContosoUniversity.Core.Extensions;
 using EventStore.ClientAPI;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace EventSourcedContosoUniversity.Core.ReadModel.Repositories
 {
     public class CatchupPositionRepository : MongoRepository, ICatchupPositionRepository
     {
-        public CatchupPositionRepository(IMongoClient client, IOptions<ReadModelSettings> settings) : base(client, settings)
+        public CatchupPositionRepository(IMongoClient client, ReadModelSettings settings) : base(client, settings)
         {
         }
         public async Task SavePosition<T>(Position position) where T : IMongoDocument

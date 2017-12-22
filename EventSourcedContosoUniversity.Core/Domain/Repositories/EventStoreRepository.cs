@@ -54,7 +54,7 @@ namespace EventSourcedContosoUniversity.Core.Domain.Repositories
             var streamName = AggregateIdToStreamName(aggregate.GetType(), aggregate.Id);
             var newEvents = aggregate.GetUncommittedChanges().Cast<object>().ToList();
             var originalVersion = aggregate.Version - newEvents.Count;
-            var expectedVersion = originalVersion == 0 ? ExpectedVersion.NoStream : originalVersion;
+            var expectedVersion = originalVersion < 0 ? ExpectedVersion.NoStream : originalVersion;
             var preparedEvents = newEvents.Select(e => EventSerializer.Create(Guid.NewGuid(), e, commitHeaders)).ToList();
 
             if (preparedEvents.Count < WritePageSize)

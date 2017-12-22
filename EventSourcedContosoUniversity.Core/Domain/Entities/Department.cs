@@ -25,6 +25,14 @@ namespace EventSourcedContosoUniversity.Core.Domain.Entities
             ApplyChange(new DepartmentUpdated(Id, name, budget, startDate, administartorId));
         }
 
+        public void Apply(DepartmentUpdated @event)
+        {
+            Name = @event.Name;
+            Budget = @event.Budget;
+            StartDate = @event.Startdate;
+            AdministratorId = @event.AdministratorId;
+        }
+
         public string Name { get; private set; }
 
         public decimal Budget { get; private set; }

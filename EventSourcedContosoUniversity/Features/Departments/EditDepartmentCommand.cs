@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using EventSourcedContosoUniversity.Core.Domain.Entities;
+using EventSourcedContosoUniversity.Core.Domain.Repositories;
 using MediatR;
 
 namespace EventSourcedContosoUniversity.Features.Departments
@@ -28,9 +28,20 @@ namespace EventSourcedContosoUniversity.Features.Departments
     }
     public class EditDepartmentCommandHandler : IRequestHandler<EditDepartmentCommand>
     {
-        public Task Handle(EditDepartmentCommand message, CancellationToken cancellationToken)
+        private readonly IRepository<Department> _repository;
+
+        public EditDepartmentCommandHandler(IRepository<Department> repository)
         {
-            throw new NotImplementedException();
+            _repository = repository;
+        }
+        public async Task Handle(EditDepartmentCommand command, CancellationToken cancellationToken)
+        {
+            var department = await _repository.GetById(command.Id);
+            if (department == null)
+                throw new Exception("Entity not found");
+
+            department.UpdateDepartment(command.Name, command.Budget, command.StartDate, command.AdministratorId);
+            await _repository.Save(department);
         }
     }
 

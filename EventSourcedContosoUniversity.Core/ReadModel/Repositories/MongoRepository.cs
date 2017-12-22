@@ -12,11 +12,11 @@ namespace EventSourcedContosoUniversity.Core.ReadModel.Repositories
     {
         private readonly IMongoClient _client;
 
-        private readonly IOptions<ReadModelSettings> _settings;
+        private readonly ReadModelSettings _settings;
 
-        protected IMongoDatabase Db => _client.GetDatabase(_settings.Value.MongoDatabase);
+        protected IMongoDatabase Db => _client.GetDatabase(_settings.MongoDatabase);
 
-        public MongoRepository(IMongoClient client, IOptions<ReadModelSettings> settings)
+        public MongoRepository(IMongoClient client, ReadModelSettings settings)
         {
             _client = client;
             _settings = settings;

@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
 using System.ComponentModel;
-using EventSourcedContosoUniversity.Core;
-using EventSourcedContosoUniversity.Core.ReadModel;
 using System.Linq;
 using EventSourcedContosoUniversity.Core.ReadModel.Departments;
 using EventSourcedContosoUniversity.Core.ReadModel.Repositories;

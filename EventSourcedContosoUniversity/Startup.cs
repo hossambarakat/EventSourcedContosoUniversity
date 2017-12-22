@@ -4,13 +4,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
-using EventStore.ClientAPI;
-using System.Net;
-using EventSourcedContosoUniversity.Core.Domain.Repositories;
 using EventSourcedContosoUniversity.Core.ReadModel;
-using EventSourcedContosoUniversity.Core.ReadModel.Repositories;
-using Microsoft.Extensions.Options;
-using MongoDB.Driver;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using EventSourcedContosoUniversity.Core.Infrastructure.IoC;
+using EventSourcedContosoUniversity.Core.Infrastructure.EventStore;
 
 namespace EventSourcedContosoUniversity
 {
@@ -26,23 +24,33 @@ namespace EventSourcedContosoUniversity
         public IServiceProvider ServiceProvider { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc()
                 .AddFeatureFolders();
 
+            services.AddOptions();
+
             services.AddMediatR();
 
-            var eventStoreConnection = EventStoreConnection.Create(new IPEndPoint(IPAddress.Loopback, 1113));
-            eventStoreConnection.ConnectAsync().Wait();
-            services.AddSingleton(eventStoreConnection);
-            services.AddScoped(typeof(IRepository<>), typeof(EventStoreRepository<>));
+            IContainer container = BuildContainer(services);
+            return new AutofacServiceProvider(container);
+        }
 
-            services.Configure<ReadModelSettings>(Configuration);
+        private IContainer BuildContainer(IServiceCollection services)
+        {
+            var eventStoreSettings = Configuration.Get<EventStoreSettings>();
+            var readModelSettings = Configuration.Get<ReadModelSettings>();
 
-            var readModelSettings = ServiceProvider.GetService<IOptions<ReadModelSettings>>();
-            services.AddSingleton<IMongoClient>(new MongoClient(Configuration["MongoConnectionString"]));
-            services.AddScoped<IReadModelRepository, MongoRepository>();
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.Populate(services);
+
+            containerBuilder.RegisterInstance(eventStoreSettings);
+            containerBuilder.RegisterInstance(readModelSettings);
+
+            containerBuilder.RegisterModule<DefaultModule>();
+            var container = containerBuilder.Build();
+            return container;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
