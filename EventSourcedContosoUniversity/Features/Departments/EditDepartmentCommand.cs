@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using EventSourcedContosoUniversity.Core.Domain.Entities;
 using EventSourcedContosoUniversity.Core.Domain.Repositories;
+using FluentValidation;
 using MediatR;
 
 namespace EventSourcedContosoUniversity.Features.Departments
@@ -25,6 +26,19 @@ namespace EventSourcedContosoUniversity.Features.Departments
 
         [Display(Name = "Administrator")]
         public Guid? AdministratorId { get; set; }
+    }
+    public class EditDepartmentCommandValidator : AbstractValidator<EditDepartmentCommand>
+    {
+        public EditDepartmentCommandValidator()
+        {
+            RuleFor(x => x.Name).NotEmpty().Length(3, 50);
+            RuleFor(x => x.Budget).NotEmpty();
+            RuleFor(x => x.StartDate).NotEmpty();
+            RuleFor(x => x.Name).Must((s) =>
+              {
+                  return s == "hoss";
+              });
+        }
     }
     public class EditDepartmentCommandHandler : IRequestHandler<EditDepartmentCommand>
     {

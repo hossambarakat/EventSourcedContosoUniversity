@@ -3,9 +3,9 @@ using System;
 using System.Threading.Tasks;
 using System.Threading;
 using System.ComponentModel.DataAnnotations;
-using EventSourcedContosoUniversity.Core.Domain;
 using EventSourcedContosoUniversity.Core.Domain.Entities;
 using EventSourcedContosoUniversity.Core.Domain.Repositories;
+using FluentValidation;
 
 namespace EventSourcedContosoUniversity.Features.Departments
 {
@@ -24,6 +24,15 @@ namespace EventSourcedContosoUniversity.Features.Departments
 
         [Display(Name = "Administrator")]
         public Guid? AdministratorId { get; set; }
+    }
+    public class CreateDepartmentCommandValidator : AbstractValidator<CreateDepartmentCommand>
+    {
+        public CreateDepartmentCommandValidator()
+        {
+            RuleFor(x => x.Name).NotEmpty().Length(3, 50);
+            RuleFor(x => x.Budget).NotEmpty();
+            RuleFor(x => x.StartDate).NotEmpty();
+        }
     }
     public class CreateDepartmentCommandHandler : IRequestHandler<CreateDepartmentCommand>
     {

@@ -9,6 +9,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using EventSourcedContosoUniversity.Core.Infrastructure.IoC;
 using EventSourcedContosoUniversity.Core.Infrastructure.EventStore;
+using FluentValidation.AspNetCore;
 
 namespace EventSourcedContosoUniversity
 {
@@ -27,7 +28,8 @@ namespace EventSourcedContosoUniversity
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc()
-                .AddFeatureFolders();
+                .AddFeatureFolders()
+                .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<Startup>());
 
             services.AddOptions();
 
