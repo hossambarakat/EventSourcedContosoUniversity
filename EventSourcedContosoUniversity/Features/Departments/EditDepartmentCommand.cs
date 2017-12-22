@@ -34,10 +34,6 @@ namespace EventSourcedContosoUniversity.Features.Departments
             RuleFor(x => x.Name).NotEmpty().Length(3, 50);
             RuleFor(x => x.Budget).NotEmpty();
             RuleFor(x => x.StartDate).NotEmpty();
-            RuleFor(x => x.Name).Must((s) =>
-              {
-                  return s == "hoss";
-              });
         }
     }
     public class EditDepartmentCommandHandler : IRequestHandler<EditDepartmentCommand>
