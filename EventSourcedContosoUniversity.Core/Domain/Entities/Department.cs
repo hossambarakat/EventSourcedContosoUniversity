@@ -20,7 +20,7 @@ namespace EventSourcedContosoUniversity.Core.Domain.Entities
             AdministratorId = @event.AdministratorId;
         }
 
-        public void UpdateDepartment(string name, decimal budget, DateTimeOffset startDate, Guid? administartorId)
+        public void Update(string name, decimal budget, DateTimeOffset startDate, Guid? administartorId)
         {
             ApplyChange(new DepartmentUpdated(Id, name, budget, startDate, administartorId));
         }
@@ -31,6 +31,11 @@ namespace EventSourcedContosoUniversity.Core.Domain.Entities
             Budget = @event.Budget;
             StartDate = @event.Startdate;
             AdministratorId = @event.AdministratorId;
+        }
+
+        public void Delete()
+        {
+            ApplyChange(new DepartmentDeleted(Id));
         }
 
         public string Name { get; private set; }

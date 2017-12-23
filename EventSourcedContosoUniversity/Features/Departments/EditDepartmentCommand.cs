@@ -50,7 +50,7 @@ namespace EventSourcedContosoUniversity.Features.Departments
             if (department == null)
                 throw new Exception("Entity not found");
 
-            department.UpdateDepartment(command.Name, command.Budget, command.StartDate, command.AdministratorId);
+            department.Update(command.Name, command.Budget, command.StartDate, command.AdministratorId);
             await _repository.Save(department);
         }
     }

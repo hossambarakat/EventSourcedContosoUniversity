@@ -89,5 +89,14 @@ namespace EventSourcedContosoUniversity.Core.Domain.Repositories
             //Ensure first character of type name is lower case to follow javascript naming conventions
             return string.Format("{0}-{1}", char.ToLower(type.Name[0]) + type.Name.Substring(1), id.ToString("N"));
         }
+
+        public Task Delete(T aggregate)
+        {
+            var streamName = AggregateIdToStreamName(typeof(T), aggregate.Id);
+            var newEvents = aggregate.GetUncommittedChanges().Cast<object>().ToList();
+            var originalVersion = aggregate.Version - newEvents.Count;
+            var expectedVersion = originalVersion < 0 ? ExpectedVersion.NoStream : originalVersion;
+            return _eventStoreConnection.DeleteStreamAsync(streamName, expectedVersion);
+        }
     }
 }

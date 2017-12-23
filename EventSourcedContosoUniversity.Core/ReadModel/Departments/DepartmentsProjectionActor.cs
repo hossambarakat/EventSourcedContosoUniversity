@@ -44,6 +44,11 @@ namespace EventSourcedContosoUniversity.Core.ReadModel.Departments
                 department.StartDate = s.Startdate;
                 await repository.Update(department);
             });
+            ReceiveAsync<DepartmentDeleted>(async (s) =>
+            {
+                var department = await repository.GetById<DepartmentReadModel>(s.Id);
+                await repository.Delete<DepartmentReadModel>(department);
+            });
             ReceiveAsync<SaveEventMessage>( async (s) =>
             {
                 await _catchupPositionRepository.SavePosition<DepartmentReadModel>(new Position(s.CommitPosition, s.PreparePosition));
