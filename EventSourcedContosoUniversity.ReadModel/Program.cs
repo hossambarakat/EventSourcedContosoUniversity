@@ -8,6 +8,8 @@ using Autofac;
 using EventSourcedContosoUniversity.Core.Infrastructure.EventStore;
 using EventSourcedContosoUniversity.Core.ReadModel;
 using EventSourcedContosoUniversity.Core.Infrastructure.IoC;
+using Serilog;
+using System;
 
 namespace EventSourcedContosoUniversity.ReadModel
 {
@@ -23,12 +25,18 @@ namespace EventSourcedContosoUniversity.ReadModel
 
             Configuration = builder.Build();
 
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(Configuration)
+                .CreateLogger();
+
             var container = BuildContainer();
 
-            using (var system = ActorSystem.Create("projections"))
+            using (var system = ActorSystem.Create("projections", "akka { loglevel=DEBUG" + Environment.NewLine+
+                "  loggers=[\"Akka.Logger.Serilog.SerilogLogger, Akka.Logger.Serilog\"] }"))
             {
                 var resolver = new Akka.DI.AutoFac.AutoFacDependencyResolver(container, system);
                 IActorRef departmentsProjectionActor = system.ActorOf(system.DI().Props<DepartmentsProjectionActor>(), "DepartmentsProjectionActor");
+                Log.Logger.Information("Application Started");
                 system.WhenTerminated.Wait();
             }
 
