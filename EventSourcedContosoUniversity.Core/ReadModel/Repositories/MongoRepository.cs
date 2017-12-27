@@ -31,6 +31,8 @@ namespace EventSourcedContosoUniversity.Core.ReadModel.Repositories
         {
             return Db.GetCollection<T>().Find(x => x.Id == id).FirstOrDefaultAsync();
         }
+
+        //TODO: Use AllAsQueryable
         public Task<List<T>> All<T>() where T : IMongoDocument, new()
         {
             return Db.GetCollection<T>().AsQueryable().ToListAsync();

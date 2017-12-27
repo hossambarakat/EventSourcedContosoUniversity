@@ -37,6 +37,7 @@ namespace EventSourcedContosoUniversity.ReadModel
                 var resolver = new Akka.DI.AutoFac.AutoFacDependencyResolver(container, system);
                 IActorRef departmentsProjectionActor = system.ActorOf(system.DI().Props<DepartmentsProjectionActor>(), "DepartmentsProjectionActor");
                 IActorRef studentsProjectionActor = system.ActorOf(system.DI().Props<StudentsProjectionActor>(), "StudentsProjectionActor");
+                IActorRef coursesProjectionActor = system.ActorOf(system.DI().Props<CoursesProjectionActor>(), "CoursesProjectionActor");
                 Log.Logger.Information("Application Started");
                 system.WhenTerminated.Wait();
             }
@@ -56,8 +57,8 @@ namespace EventSourcedContosoUniversity.ReadModel
             //TODO: automatic discover and register actors
             containerBuilder.RegisterType<DepartmentsProjectionActor>().AsSelf();
             containerBuilder.RegisterType<StudentsProjectionActor>().AsSelf();
+            containerBuilder.RegisterType<CoursesProjectionActor>().AsSelf();
 
-            
             containerBuilder.RegisterType<EventStoreDispatcher>().AsSelf();
             containerBuilder.RegisterType<CatchupPositionRepository>().AsImplementedInterfaces();
 
