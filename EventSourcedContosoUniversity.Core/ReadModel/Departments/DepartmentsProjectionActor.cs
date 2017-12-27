@@ -1,28 +1,14 @@
-using System;
-using Akka.Actor;
 using EventSourcedContosoUniversity.Core.Domain.Events;
 using EventSourcedContosoUniversity.Core.Infrastructure.EventStore;
 using EventSourcedContosoUniversity.Core.ReadModel.Repositories;
-using EventStore.ClientAPI;
-using Microsoft.Extensions.Options;
-using MongoDB.Driver;
 
 namespace EventSourcedContosoUniversity.Core.ReadModel.Departments
 {
-    public class DepartmentsProjectionActor : ReceiveActor
+    public class DepartmentsProjectionActor : BaseProjectionActor<DepartmentReadModel>
     {
-        readonly EventStoreDispatcher _dispatcher;
-        private readonly ICatchupPositionRepository _catchupPositionRepository;
-
-        public class SaveEventMessage
-        {
-            public long CommitPosition { get; set; }
-            public long PreparePosition { get; set; }
-        }
         public DepartmentsProjectionActor(EventStoreDispatcher dispatcher, IReadModelRepository repository, ICatchupPositionRepository catchupPositionRepository)
+            : base(dispatcher, repository, catchupPositionRepository)
         {
-            _catchupPositionRepository = catchupPositionRepository;
-            _dispatcher = dispatcher;
             ReceiveAsync<DepartmentCreated>(async (s) =>
             {
                 await repository.Add(new DepartmentReadModel
@@ -49,35 +35,6 @@ namespace EventSourcedContosoUniversity.Core.ReadModel.Departments
                 var department = await repository.GetById<DepartmentReadModel>(s.Id);
                 await repository.Delete<DepartmentReadModel>(department);
             });
-            ReceiveAsync<SaveEventMessage>( async (s) =>
-            {
-                await _catchupPositionRepository.SavePosition<DepartmentReadModel>(new Position(s.CommitPosition, s.PreparePosition));
-            });
-        }
-
-        protected override void PreStart()
-        {
-            var sender = Self;
-            var last= _catchupPositionRepository.GetLastProcessedPosition<DepartmentReadModel>().Result ;
-            var lastProcessedPosition = last != null ? new Position(last.CommitPosition, last.PreparePosition) : Position.Start;
-            
-            _dispatcher.StartDispatchingForAll(lastProcessedPosition.CommitPosition, lastProcessedPosition.PreparePosition, (o) =>
-            {
-                sender.Tell(o);
-            },
-                (commitPosition, preparePosition) =>
-                {
-                    sender.Tell(new SaveEventMessage
-                    {
-                        CommitPosition = commitPosition,
-                        PreparePosition = preparePosition
-                    });
-                });
-        }
-
-        protected override void PostStop()
-        {
-            _dispatcher.StopDispatching(TimeSpan.FromSeconds(3000));
         }
     }
 }
