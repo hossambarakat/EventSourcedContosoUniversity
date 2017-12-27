@@ -7,13 +7,9 @@ namespace EventSourcedContosoUniversity.Core.ReadModel.Departments
 {
     public class StudentsProjectionActor : BaseProjectionActor<StudentReadModel>
     {
-        private readonly ICatchupPositionRepository _catchupPositionRepository;
-
         public StudentsProjectionActor(EventStoreDispatcher dispatcher, IReadModelRepository repository, ICatchupPositionRepository catchupPositionRepository)
             : base(dispatcher,repository,catchupPositionRepository)
         {
-            _catchupPositionRepository = catchupPositionRepository;
-            
             ReceiveAsync<StudentCreated>(async (s) =>
             {
                 await repository.Add(new StudentReadModel
