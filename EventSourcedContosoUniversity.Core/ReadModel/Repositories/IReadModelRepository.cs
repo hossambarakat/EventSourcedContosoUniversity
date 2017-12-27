@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EventSourcedContosoUniversity.Core.ReadModel.Repositories
@@ -11,5 +12,6 @@ namespace EventSourcedContosoUniversity.Core.ReadModel.Repositories
         Task Delete<T>(T item) where T : IMongoDocument, new();
         Task<T> GetById<T>(Guid id) where T : IMongoDocument, new();
         Task<List<T>> All<T>() where T : IMongoDocument, new();
+        IQueryable<T> AllAsQueryable<T>() where T : IMongoDocument, new();
     }
 }
