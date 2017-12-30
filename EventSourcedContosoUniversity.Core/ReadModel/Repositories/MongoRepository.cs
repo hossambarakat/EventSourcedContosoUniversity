@@ -52,5 +52,10 @@ namespace EventSourcedContosoUniversity.Core.ReadModel.Repositories
         {
             return Db.GetCollection<T>().AsQueryable();
         }
+
+        public IMongoCollection<T> GetCollection<T>() where T : IMongoDocument, new()
+        {
+            return Db.GetCollection<T>();
+        }
     }
 }

@@ -3,7 +3,7 @@ using Akka.Actor;
 using EventSourcedContosoUniversity.Core.Infrastructure.EventStore;
 using EventSourcedContosoUniversity.Core.ReadModel.Repositories;
 using EventStore.ClientAPI;
-
+using Serilog;
 
 namespace EventSourcedContosoUniversity.Core.ReadModel
 {
@@ -11,6 +11,7 @@ namespace EventSourcedContosoUniversity.Core.ReadModel
     {
         readonly EventStoreDispatcher _dispatcher;
         private readonly ICatchupPositionRepository _catchupPositionRepository;
+        public Position LastProcessedPosition { get; private set; }
 
         public class SaveEventMessage
         {
@@ -24,7 +25,9 @@ namespace EventSourcedContosoUniversity.Core.ReadModel
 
             ReceiveAsync<SaveEventMessage>(async (s) =>
             {
-                await _catchupPositionRepository.SavePosition<T>(new Position(s.CommitPosition, s.PreparePosition));
+                var position = new Position(s.CommitPosition, s.PreparePosition);
+                await _catchupPositionRepository.SavePosition<T>(position);
+                LastProcessedPosition = position;
             });
         }
 
@@ -32,9 +35,9 @@ namespace EventSourcedContosoUniversity.Core.ReadModel
         {
             var sender = Self;
             var last = _catchupPositionRepository.GetLastProcessedPosition<T>().Result;
-            var lastProcessedPosition = last != null ? new Position(last.CommitPosition, last.PreparePosition) : Position.Start;
+            LastProcessedPosition = last != null ? new Position(last.CommitPosition, last.PreparePosition) : Position.Start;
 
-            _dispatcher.StartDispatchingForAll(lastProcessedPosition.CommitPosition, lastProcessedPosition.PreparePosition, (o) =>
+            _dispatcher.StartDispatchingForAll(LastProcessedPosition.CommitPosition, LastProcessedPosition.PreparePosition, (o) =>
             {
                 sender.Tell(o);
             },
