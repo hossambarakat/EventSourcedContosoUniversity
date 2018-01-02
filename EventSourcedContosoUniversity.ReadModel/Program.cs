@@ -10,6 +10,7 @@ using EventSourcedContosoUniversity.Core.ReadModel;
 using EventSourcedContosoUniversity.Core.Infrastructure.IoC;
 using Serilog;
 using System;
+using EventSourcedContosoUniversity.Core.ReadModel.Instructors;
 
 namespace EventSourcedContosoUniversity.ReadModel
 {
@@ -38,6 +39,7 @@ namespace EventSourcedContosoUniversity.ReadModel
                 IActorRef departmentsProjectionActor = system.ActorOf(system.DI().Props<DepartmentsProjectionActor>(), "DepartmentsProjectionActor");
                 IActorRef studentsProjectionActor = system.ActorOf(system.DI().Props<StudentsProjectionActor>(), "StudentsProjectionActor");
                 IActorRef coursesProjectionActor = system.ActorOf(system.DI().Props<CoursesProjectionActor>(), "CoursesProjectionActor");
+                IActorRef instructorsProjectionActor = system.ActorOf(system.DI().Props<InstructorsProjectionActor>(), "InstructorsProjectionActor");
                 Log.Logger.Information("Application Started");
                 system.WhenTerminated.Wait();
             }
@@ -58,7 +60,8 @@ namespace EventSourcedContosoUniversity.ReadModel
             containerBuilder.RegisterType<DepartmentsProjectionActor>().AsSelf();
             containerBuilder.RegisterType<StudentsProjectionActor>().AsSelf();
             containerBuilder.RegisterType<CoursesProjectionActor>().AsSelf();
-
+            containerBuilder.RegisterType<InstructorsProjectionActor>().AsSelf();
+            
             containerBuilder.RegisterType<EventStoreDispatcher>().AsSelf();
             containerBuilder.RegisterType<CatchupPositionRepository>().AsImplementedInterfaces();
 
