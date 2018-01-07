@@ -42,9 +42,13 @@ namespace EventSourcedContosoUniversity.Features.Departments
         {
             _repository = repository;
         }
-        public Task Handle(CreateDepartmentCommand message, CancellationToken cancellationToken)
+        public Task Handle(CreateDepartmentCommand command, CancellationToken cancellationToken)
         {
-            var department = new Department(Guid.NewGuid(), message.Name, message.Budget, message.StartDate, message.AdministratorId);
+            var department = new Department(Guid.NewGuid(), command.Name, command.Budget, command.StartDate);
+            if(command.AdministratorId.HasValue)
+            {
+                department.AssignAdministrator(command.AdministratorId.Value);
+            }
             return _repository.Save(department);
         }
     }
