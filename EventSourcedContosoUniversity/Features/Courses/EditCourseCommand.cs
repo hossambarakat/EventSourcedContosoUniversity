@@ -27,7 +27,7 @@ namespace EventSourcedContosoUniversity.Features.Courses
             RuleFor(x => x.DepartmentId).NotEmpty();
         }
     }
-    public class EditCourseCommandHandler : IRequestHandler<EditCourseCommand>
+    public class EditCourseCommandHandler : AsyncRequestHandler<EditCourseCommand>
     {
         private readonly IRepository<Course> _repository;
 
@@ -35,7 +35,7 @@ namespace EventSourcedContosoUniversity.Features.Courses
         {
             _repository = repository;
         }
-        public async Task Handle(EditCourseCommand message, CancellationToken cancellationToken)
+        protected override async Task Handle(EditCourseCommand message, CancellationToken cancellationToken)
         {
             var course = await _repository.GetById(message.Id);
             //TODO: handle not found

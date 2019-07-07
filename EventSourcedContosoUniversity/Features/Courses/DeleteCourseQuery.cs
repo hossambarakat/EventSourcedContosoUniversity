@@ -65,7 +65,7 @@ namespace EventSourcedContosoUniversity.Features.Courses
             RuleFor(x => x.Id).NotEmpty();
         }
     }
-    public class DeleteCourseCommandHandler : IRequestHandler<DeleteCourseCommand>
+    public class DeleteCourseCommandHandler : AsyncRequestHandler<DeleteCourseCommand>
     {
         private readonly IRepository<Course> _repository;
 
@@ -73,11 +73,12 @@ namespace EventSourcedContosoUniversity.Features.Courses
         {
             _repository = repository;
         }
-        public async Task Handle(DeleteCourseCommand message, CancellationToken cancellationToken)
+        protected override async Task Handle(DeleteCourseCommand message, CancellationToken cancellationToken)
         {
             var course = await _repository.GetById(message.Id);
             course.Delete();
             await _repository.Save(course);
         }
+
     }
 }

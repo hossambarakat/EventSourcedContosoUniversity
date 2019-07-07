@@ -43,7 +43,6 @@ namespace EventSourcedContosoUniversity.ReadModel
                 Log.Logger.Information("Application Started");
                 system.WhenTerminated.Wait();
             }
-
         }
 
         private static IContainer BuildContainer()

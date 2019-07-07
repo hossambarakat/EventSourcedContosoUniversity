@@ -21,7 +21,7 @@ namespace EventSourcedContosoUniversity.Features.Instructors
             RuleFor(x => x.Id).NotEmpty();
         }
     }
-    public class DeleteInstructorCommandHandler : IRequestHandler<DeleteInstructorCommand>
+    public class DeleteInstructorCommandHandler : AsyncRequestHandler<DeleteInstructorCommand>
     {
         private readonly IRepository<Instructor> _instructorsRepository;
 
@@ -30,7 +30,7 @@ namespace EventSourcedContosoUniversity.Features.Instructors
             _instructorsRepository = instructorsRepository;
         }
 
-        public async Task Handle(DeleteInstructorCommand command, CancellationToken cancellationToken)
+        protected override async Task Handle(DeleteInstructorCommand command, CancellationToken cancellationToken)
         {
             var instructor = await _instructorsRepository.GetById(command.Id);
             instructor.Delete();

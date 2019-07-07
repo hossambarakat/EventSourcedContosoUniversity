@@ -33,7 +33,7 @@ namespace EventSourcedContosoUniversity.Features.Students
             RuleFor(x => x.FirstMidName).MaximumLength(50).WithMessage("First name cannot be longer than 50 characters.");
         }
     }
-    public class EditStudentCommandHandler : IRequestHandler<EditStudentCommand>
+    public class EditStudentCommandHandler : AsyncRequestHandler<EditStudentCommand>
     {
         private readonly IRepository<Student> _repository;
 
@@ -41,7 +41,7 @@ namespace EventSourcedContosoUniversity.Features.Students
         {
             _repository = repository;
         }
-        public async Task Handle(EditStudentCommand message, CancellationToken cancellationToken)
+        protected override async Task Handle(EditStudentCommand message, CancellationToken cancellationToken)
         {
             var student = await _repository.GetById(message.Id);
             student.Update(message.FirstMidName, message.LastName, message.EnrollmentDate);

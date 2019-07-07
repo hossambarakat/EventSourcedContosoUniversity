@@ -34,7 +34,7 @@ namespace EventSourcedContosoUniversity.Features.Departments
             RuleFor(x => x.StartDate).NotEmpty();
         }
     }
-    public class CreateDepartmentCommandHandler : IRequestHandler<CreateDepartmentCommand>
+    public class CreateDepartmentCommandHandler : AsyncRequestHandler<CreateDepartmentCommand>
     {
         private readonly IRepository<Department> _repository;
 
@@ -42,7 +42,7 @@ namespace EventSourcedContosoUniversity.Features.Departments
         {
             _repository = repository;
         }
-        public Task Handle(CreateDepartmentCommand command, CancellationToken cancellationToken)
+        protected override Task Handle(CreateDepartmentCommand command, CancellationToken cancellationToken)
         {
             var department = new Department(Guid.NewGuid(), command.Name, command.Budget, command.StartDate);
             if(command.AdministratorId.HasValue)

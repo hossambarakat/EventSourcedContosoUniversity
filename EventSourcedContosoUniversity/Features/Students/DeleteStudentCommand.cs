@@ -19,7 +19,7 @@ namespace EventSourcedContosoUniversity.Features.Students
             RuleFor(x => x.Id).NotEmpty();
         }
     }
-    public class DeleteStudentCommandHandler : IRequestHandler<DeleteStudentCommand>
+    public class DeleteStudentCommandHandler : AsyncRequestHandler<DeleteStudentCommand>
     {
         private readonly IRepository<Student> _repository;
 
@@ -27,7 +27,7 @@ namespace EventSourcedContosoUniversity.Features.Students
         {
             _repository = repository;
         }
-        public async Task Handle(DeleteStudentCommand message, CancellationToken cancellationToken)
+        protected override async Task Handle(DeleteStudentCommand message, CancellationToken cancellationToken)
         {
             var student = await _repository.GetById(message.Id);
             student.Delete();

@@ -32,7 +32,7 @@ namespace EventSourcedContosoUniversity.Features.Students
         }
     }
 
-    public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand>
+    public class CreateStudentCommandHandler : AsyncRequestHandler<CreateStudentCommand>
     {
         private readonly IRepository<Student> _repository;
 
@@ -40,7 +40,7 @@ namespace EventSourcedContosoUniversity.Features.Students
         {
             _repository = repository;
         }
-        public Task Handle(CreateStudentCommand message, CancellationToken cancellationToken)
+        protected override Task Handle(CreateStudentCommand message, CancellationToken cancellationToken)
         {
             var student = new Student(Guid.NewGuid(), message.FirstMidName, message.LastName, message.EnrollmentDate);
             return _repository.Save(student);

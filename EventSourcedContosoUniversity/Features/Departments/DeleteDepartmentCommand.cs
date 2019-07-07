@@ -17,7 +17,7 @@ namespace EventSourcedContosoUniversity.Features.Departments
         public DateTimeOffset StartDate { get; set; }
         public string Administrator { get; set; }
     }
-    public class DeleteCommandHandler : IRequestHandler<DeleteDepartmentCommand>
+    public class DeleteCommandHandler : AsyncRequestHandler<DeleteDepartmentCommand>
     {
         private readonly IRepository<Department> _repository;
 
@@ -25,7 +25,7 @@ namespace EventSourcedContosoUniversity.Features.Departments
         {
             _repository = repository;
         }
-        public async Task Handle(DeleteDepartmentCommand command, CancellationToken cancellationToken)
+        protected override async Task Handle(DeleteDepartmentCommand command, CancellationToken cancellationToken)
         {
             var department = await _repository.GetById(command.Id);
             if(department==null)

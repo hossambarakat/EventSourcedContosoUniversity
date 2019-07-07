@@ -45,7 +45,7 @@ namespace EventSourcedContosoUniversity.Features.Instructors
             RuleFor(x => x.OfficeLocation).MaximumLength(50);
         }
     }
-    public class CreateInstructorCommandHandler : IRequestHandler<CreateInstructorCommand>
+    public class CreateInstructorCommandHandler : AsyncRequestHandler<CreateInstructorCommand>
     {
         private readonly IRepository<Instructor> _repository;
 
@@ -53,7 +53,7 @@ namespace EventSourcedContosoUniversity.Features.Instructors
         {
             _repository = repository;
         }
-        public async Task Handle(CreateInstructorCommand command, CancellationToken cancellationToken)
+        protected override async Task Handle(CreateInstructorCommand command, CancellationToken cancellationToken)
         {
             var instructor = new Instructor(Guid.NewGuid(), command.LastName, command.FirstName, command.HireDate);
             if (command.OfficeLocation != null)

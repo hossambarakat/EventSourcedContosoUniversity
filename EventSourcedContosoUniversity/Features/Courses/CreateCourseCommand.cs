@@ -27,7 +27,7 @@ namespace EventSourcedContosoUniversity.Features.Courses
             RuleFor(x => x.DepartmentId).NotEmpty();
         }
     }
-    public class CreateCourseCommandHandler : IRequestHandler<CreateCourseCommand>
+    public class CreateCourseCommandHandler : AsyncRequestHandler<CreateCourseCommand>
     {
         private readonly IRepository<Course> _repository;
 
@@ -35,7 +35,7 @@ namespace EventSourcedContosoUniversity.Features.Courses
         {
             _repository = repository;
         }
-        public Task Handle(CreateCourseCommand message, CancellationToken cancellationToken)
+        protected override Task Handle(CreateCourseCommand message, CancellationToken cancellationToken)
         {
             var course = new Course(Guid.NewGuid(), message.Number, message.Title, message.Credits, message.DepartmentId);
             return _repository.Save(course);

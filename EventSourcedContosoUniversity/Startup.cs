@@ -10,6 +10,7 @@ using Autofac.Extensions.DependencyInjection;
 using EventSourcedContosoUniversity.Core.Infrastructure.IoC;
 using EventSourcedContosoUniversity.Core.Infrastructure.EventStore;
 using FluentValidation.AspNetCore;
+using System.Reflection;
 
 namespace EventSourcedContosoUniversity
 {
@@ -33,7 +34,7 @@ namespace EventSourcedContosoUniversity
 
             services.AddOptions();
 
-            services.AddMediatR();
+            services.AddMediatR(typeof(Startup).Assembly);
 
             IContainer container = BuildContainer(services);
             return new AutofacServiceProvider(container);
@@ -61,7 +62,6 @@ namespace EventSourcedContosoUniversity
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
             }
             else
             {

@@ -1,18 +1,6 @@
 version: '3'
 
 services:
-  eventsourcedcontosouniversity:
-    image: eventsourcedcontosouniversity
-    build:
-      context: ./EventSourcedContosoUniversity
-      dockerfile: Dockerfile
-
-  eventsourcedcontosouniversity.readmodel:
-    image: eventsourcedcontosouniversity.readmodel
-    build:
-      context: .
-      dockerfile: EventSourcedContosoUniversity.ReadModel/Dockerfile
-
   mongodb:
     image: mongo
     ports:

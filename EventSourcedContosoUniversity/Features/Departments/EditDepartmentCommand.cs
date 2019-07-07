@@ -36,7 +36,7 @@ namespace EventSourcedContosoUniversity.Features.Departments
             RuleFor(x => x.StartDate).NotEmpty();
         }
     }
-    public class EditDepartmentCommandHandler : IRequestHandler<EditDepartmentCommand>
+    public class EditDepartmentCommandHandler : AsyncRequestHandler<EditDepartmentCommand>
     {
         private readonly IRepository<Department> _repository;
 
@@ -44,7 +44,7 @@ namespace EventSourcedContosoUniversity.Features.Departments
         {
             _repository = repository;
         }
-        public async Task Handle(EditDepartmentCommand command, CancellationToken cancellationToken)
+        protected override async Task Handle(EditDepartmentCommand command, CancellationToken cancellationToken)
         {
             var department = await _repository.GetById(command.Id);
             if (department == null)

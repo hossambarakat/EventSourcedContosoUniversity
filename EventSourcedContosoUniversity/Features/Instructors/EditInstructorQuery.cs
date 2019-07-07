@@ -68,7 +68,7 @@ namespace EventSourcedContosoUniversity.Features.Instructors
             RuleFor(x => x.OfficeLocation).MaximumLength(50);
         }
     }
-    public class EditInstructorCommandHandler : IRequestHandler<EditInstructorCommand>
+    public class EditInstructorCommandHandler : AsyncRequestHandler<EditInstructorCommand>
     {
         private readonly IRepository<Instructor> _instructorsRepository;
 
@@ -76,7 +76,7 @@ namespace EventSourcedContosoUniversity.Features.Instructors
         {
             _instructorsRepository = instructorsRepository;
         }
-        public async Task Handle(EditInstructorCommand command, CancellationToken cancellationToken)
+        protected override async Task Handle(EditInstructorCommand command, CancellationToken cancellationToken)
         {
             var instructor = await _instructorsRepository.GetById(command.Id);
             if(instructor == null)
